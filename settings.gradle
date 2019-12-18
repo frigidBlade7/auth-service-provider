@@ -1,0 +1,2 @@
+include ':app', ':authenticationserviceprovider'
+rootProject.name='Auth Service Provider'
