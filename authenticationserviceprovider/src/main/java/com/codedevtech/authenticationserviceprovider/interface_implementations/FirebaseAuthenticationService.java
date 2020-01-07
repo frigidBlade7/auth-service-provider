@@ -14,7 +14,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public abstract class FirebaseAuthenticationService implements AuthenticationService {
+public class FirebaseAuthenticationService implements AuthenticationService {
 
     private static final String TAG = "FirebaseAuthenticationS";
     private FirebaseAuth firebaseAuthInstance;
