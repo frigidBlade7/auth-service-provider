@@ -1,10 +1,8 @@
 package com.codedevtech.authenticationserviceprovider.interfaces;
 
 
-import android.net.wifi.hotspot2.pps.Credential;
-
 import com.codedevtech.authenticationserviceprovider.callbacks.AttemptLoginCallback;
-import com.codedevtech.authenticationserviceprovider.callbacks.AttemptRegistrationCallback;
+import com.codedevtech.authenticationserviceprovider.callbacks.AttemptPhoneVerificationCallback;
 import com.google.firebase.auth.AuthCredential;
 
 public interface AuthenticationService {
@@ -17,5 +15,6 @@ public interface AuthenticationService {
     //for registration
 
     void attemptRegistrationWithCredential(String username, String password, AttemptLoginCallback attemptLoginCallback);
+
 
 }
