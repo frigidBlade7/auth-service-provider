@@ -65,6 +65,7 @@ public class FirebaseVerificationService implements VerificationService {
                     @Override
                     public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                         super.onCodeSent(s, forceResendingToken);
+                        attemptPhoneVerificationCallback.onCodeSent(s, forceResendingToken);
                     }
                 });
     }

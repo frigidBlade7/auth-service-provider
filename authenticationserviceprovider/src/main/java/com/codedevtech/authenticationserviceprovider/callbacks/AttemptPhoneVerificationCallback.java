@@ -1,5 +1,7 @@
 package com.codedevtech.authenticationserviceprovider.callbacks;
 
+import com.google.firebase.auth.PhoneAuthProvider;
+
 public interface AttemptPhoneVerificationCallback {
 
     //to be called when login fails
@@ -9,9 +11,9 @@ public interface AttemptPhoneVerificationCallback {
     void onAttemptSuccess(String userAuthProviderId);
 
 
-    void onCodeSent();
+    void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken forceResendingToken);
 
-    void onCodeTimeout(String s);
+    void onCodeTimeout(String verificationId);
 
 
     //sigh do i need this? maybe
