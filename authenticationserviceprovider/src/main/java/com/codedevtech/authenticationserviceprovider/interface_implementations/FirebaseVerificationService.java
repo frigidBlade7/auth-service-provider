@@ -24,7 +24,7 @@ public class FirebaseVerificationService implements VerificationService {
 
     @Override
     public void verifyPhoneCode(final String phoneNumber, int secondsToTimeout,
-                                final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback) {
+                                final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback, PhoneAuthProvider.ForceResendingToken token) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,
                 secondsToTimeout,
@@ -67,6 +67,6 @@ public class FirebaseVerificationService implements VerificationService {
                         super.onCodeSent(s, forceResendingToken);
                         attemptPhoneVerificationCallback.onCodeSent(s, forceResendingToken);
                     }
-                });
+                }, token);
     }
 }
