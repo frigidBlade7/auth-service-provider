@@ -17,14 +17,23 @@ public class FirebaseVerificationService implements VerificationService {
     private static final String TAG = "FirebaseVerificationSer";
 
     private FirebaseAuthenticationService firebaseAuthenticationService;
+    private PhoneAuthProvider.ForceResendingToken forceResendingToken;
 
     public FirebaseVerificationService(FirebaseAuthenticationService firebaseAuthenticationService) {
         this.firebaseAuthenticationService = firebaseAuthenticationService;
     }
 
+    public PhoneAuthProvider.ForceResendingToken getForceResendingToken() {
+        return forceResendingToken;
+    }
+
+    public void setForceResendingToken(PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+        this.forceResendingToken = forceResendingToken;
+    }
+
     @Override
     public void verifyPhoneCode(final String phoneNumber, int secondsToTimeout,
-                                final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback, PhoneAuthProvider.ForceResendingToken token) {
+                                final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,
                 secondsToTimeout,
@@ -67,6 +76,6 @@ public class FirebaseVerificationService implements VerificationService {
                         super.onCodeSent(s, forceResendingToken);
                         attemptPhoneVerificationCallback.onCodeSent(s, forceResendingToken);
                     }
-                }, token);
+                }, getForceResendingToken());
     }
 }

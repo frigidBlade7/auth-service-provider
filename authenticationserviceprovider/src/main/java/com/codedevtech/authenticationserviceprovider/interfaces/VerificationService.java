@@ -7,6 +7,6 @@ public interface VerificationService {
 
     //for phone verification
 
-    void verifyPhoneCode(String phoneNumber, int secondsToTimeout, AttemptPhoneVerificationCallback attemptPhoneVerificationCallback, PhoneAuthProvider.ForceResendingToken forceResendingToken);
+    void verifyPhoneCode(String phoneNumber, int secondsToTimeout, AttemptPhoneVerificationCallback attemptPhoneVerificationCallback);
 
 }
