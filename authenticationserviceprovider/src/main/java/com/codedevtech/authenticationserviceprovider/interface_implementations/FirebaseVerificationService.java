@@ -41,7 +41,6 @@ public class FirebaseVerificationService implements VerificationService {
                 TaskExecutors.MAIN_THREAD,new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                        attemptPhoneVerificationCallback.onAttemptSuccess(phoneAuthCredential.toString());
                         firebaseAuthenticationService.attemptLoginWithCredential(phoneAuthCredential, new AttemptLoginCallback() {
                             @Override
                             public void onAttemptLoginFailed(String errorMessage) {
