@@ -1,8 +1,22 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
-group = findProperty("group") ?: 'com.github.frigidBlade7'
-version = findProperty("version") ?: '1.0'
+// Use System properties first (from -P flags), then gradle.properties, then defaults
+if (project.hasProperty("group")) {
+    group = project.property("group")
+} else if (System.getProperty("group")) {
+    group = System.getProperty("group")
+} else {
+    group = 'com.github.frigidBlade7'
+}
+
+if (project.hasProperty("version")) {
+    version = project.property("version")
+} else if (System.getProperty("version")) {
+    version = System.getProperty("version")
+} else {
+    version = '1.0'
+}
 
 android {
     namespace 'com.codedevtech.authenticationserviceprovider'
@@ -52,15 +66,37 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                groupId = project.group
-                artifactId = "auth-service-provider"
-                version = project.version
+                // Determine the correct groupId
+                def resolvedGroupId = 'com.github.frigidBlade7'
+                if (project.hasProperty("group")) {
+                    def val = project.property("group")
+                    if (val && val != 'Auth Service Provider' && val != 'unspecified') {
+                        resolvedGroupId = val
+                    }
+                }
+                if (System.getProperty("group")) {
+                    resolvedGroupId = System.getProperty("group")
+                }
 
+                def resolvedVersion = '1.0'
+                if (project.hasProperty("version")) {
+                    def val = project.property("version")
+                    if (val && val != 'unspecified') {
+                        resolvedVersion = val
+                    }
+                }
+                if (System.getProperty("version")) {
+                    resolvedVersion = System.getProperty("version")
+                }
+
+                // Check if components.release exists before using it
                 if (components.hasProperty('release')) {
                     from components.release
-                } else if (components.hasProperty('java')) {
-                    from components.java
                 }
+
+                groupId resolvedGroupId
+                artifactId "auth-service-provider"
+                version resolvedVersion
 
                 // Include the AAR artifact
                 artifact bundleReleaseAar
