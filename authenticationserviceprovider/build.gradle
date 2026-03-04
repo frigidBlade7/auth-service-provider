@@ -1,6 +1,9 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
+group = findProperty("group") ?: 'com.github.frigidBlade7'
+version = findProperty("version") ?: '1.0'
+
 android {
     namespace 'com.codedevtech.authenticationserviceprovider'
     compileSdk 36
@@ -43,3 +46,32 @@ dependencies {
     // Modern Facebook SDK
     api('com.facebook.android:facebook-android-sdk:18.1.3')
 }
+
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                groupId = project.group
+                artifactId = "auth-service-provider"
+                version = project.version
+
+                if (components.hasProperty('release')) {
+                    from components.release
+                } else if (components.hasProperty('java')) {
+                    from components.java
+                }
+
+                // Include the AAR artifact
+                artifact bundleReleaseAar
+
+                // Add POM configuration
+                pom {
+                    name = 'Auth Service Provider'
+                    description = 'Authentication service provider library for Android'
+                }
+            }
+        }
+    }
+}
+
