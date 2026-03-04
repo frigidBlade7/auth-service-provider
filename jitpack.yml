@@ -1,0 +1,9 @@
+jdk:
+  - openjdk17
+
+before_install:
+  - chmod +x gradlew
+
+install:
+  - ./gradlew clean -Pgroup=com.github.frigidBlade7 -Pversion=$VERSION -xtest -xlint :authenticationserviceprovider:publishToMavenLocal
+
