@@ -1,12 +1,10 @@
 package com.codedevtech.authenticationserviceprovider.interface_implementations;
 
-import android.net.wifi.hotspot2.pps.Credential;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
 import com.codedevtech.authenticationserviceprovider.callbacks.AttemptLoginCallback;
-import com.codedevtech.authenticationserviceprovider.callbacks.AttemptRegistrationCallback;
 import com.codedevtech.authenticationserviceprovider.interfaces.AuthenticationService;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -47,7 +45,7 @@ public class FirebaseAuthenticationService implements AuthenticationService {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    attemptLoginCallback.onAttemptLoginSuccess(FirebaseAuth.getInstance().getUid());
+                    attemptLoginCallback.onAttemptLoginSuccess(FirebaseAuth.getInstance().getCurrentUser().getUid());
                 }else{
 /*                    if(task.isCanceled())
                         attemptLoginCallback.onErrorOccurred(task.getException().getLocalizedMessage());*/

@@ -1,13 +1,16 @@
 package com.codedevtech.authenticationserviceprovider.interface_implementations;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 
 import com.codedevtech.authenticationserviceprovider.callbacks.AttemptLoginCallback;
 import com.codedevtech.authenticationserviceprovider.callbacks.AttemptPhoneVerificationCallback;
 import com.codedevtech.authenticationserviceprovider.interfaces.VerificationService;
-import com.google.android.gms.tasks.TaskExecutors;
 import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 
 import java.util.concurrent.TimeUnit;
@@ -34,11 +37,16 @@ public class FirebaseVerificationService implements VerificationService {
     @Override
     public void verifyPhoneCode(final String phoneNumber, int secondsToTimeout,
                                 final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback) {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                phoneNumber,
-                secondsToTimeout,
-                TimeUnit.SECONDS,
-                TaskExecutors.MAIN_THREAD,new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        verifyPhoneCode(phoneNumber, secondsToTimeout, attemptPhoneVerificationCallback, null);
+    }
+
+    public void verifyPhoneCode(final String phoneNumber, int secondsToTimeout,
+                                final AttemptPhoneVerificationCallback attemptPhoneVerificationCallback,
+                                Activity activity) {
+        PhoneAuthOptions.Builder optionsBuilder = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
+                .setPhoneNumber(phoneNumber)
+                .setTimeout((long) secondsToTimeout, TimeUnit.SECONDS)
+                .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                     @Override
                     public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                         firebaseAuthenticationService.attemptLoginWithCredential(phoneAuthCredential, new AttemptLoginCallback() {
@@ -75,6 +83,16 @@ public class FirebaseVerificationService implements VerificationService {
                         super.onCodeSent(s, forceResendingToken);
                         attemptPhoneVerificationCallback.onCodeSent(s, forceResendingToken);
                     }
-                }, getForceResendingToken());
+                });
+
+        if (activity != null) {
+            optionsBuilder.setActivity(activity);
+        }
+
+        if (getForceResendingToken() != null) {
+            optionsBuilder.setForceResendingToken(getForceResendingToken());
+        }
+
+        PhoneAuthProvider.verifyPhoneNumber(optionsBuilder.build());
     }
 }
