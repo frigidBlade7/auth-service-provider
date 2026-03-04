@@ -37,3 +37,12 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// JitPack runs publishToMavenLocal at the root; delegate to the Android library module.
+tasks.register('publishToMavenLocal') {
+    def libProjectPath = ':authenticationserviceprovider'
+    if (!findProject(libProjectPath)) {
+        throw new GradleException("Expected module ${libProjectPath} was not found.")
+    }
+    dependsOn("${libProjectPath}:publishToMavenLocal")
+}
